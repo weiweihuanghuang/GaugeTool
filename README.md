@@ -2,13 +2,13 @@
 
 This is a plugin for [Glyphs App](http://glyphsapp.com/). Shout out to [Dinamo](http://www.dinamo.us) for the idea and Georg Seifert (@schriftgestalt) for sample code and assistance!
 
-![Gauge tool animation](gaugetool.gif)
+![Gauge tool animation](images/gaugetool.gif)
 
 The tool shows an oval for a mouse cursor which can be used to gauge the width of strokes. The size of this oval is set in the dimensions palette and the Notes tab in the Font Info window.
 
-![n tool](n.png) ![o tool](o.png)
+![n tool](images/n.png) ![o tool](images/o.png)
 
-![Dimensions palette](dimensions.png)
+![Dimensions palette](images/dimensions.png)
 #### Lowercase
 There are 2 tools nested under each other, the 'n' and 'o' tool, which uses their respective values in the dimensions palette for lowercase letters. (To change tools, press Shift+C). 'n' is blue while 'o' is green.
 
@@ -18,11 +18,11 @@ It will detect uppercase letters and uses only the 'O' dimensions. This is the s
 #### Other glyphs
 If it is neither lowercase or uppercase the tool will use the value set in the first line of the Notes parameter. Which can be set with the [Note Palette](https://github.com/mekkablue/NotePalettes) plugin:
 
-![Notes Palette](notespalette.png)
+![Notes Palette](images/notespalette.png)
 
 or in the Font Info window:
 
-![Notes Tab](notestab.png)
+![Notes Tab](images/notestab.png)
 
 When the tool is using the dimension palette measurements the circle is either blue (n) or green (o), otherwise if it is using the notes parameter value the circle is red.
 
