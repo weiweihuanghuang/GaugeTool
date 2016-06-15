@@ -21,6 +21,7 @@ If it is neither lowercase or uppercase the tool will use the value set in the f
 ![Notes Palette](notespalette.png)
 
 or in the Font Info window:
+
 ![Notes Tab](notestab.png)
 
 When the tool is using the dimension palette measurements the circle is either blue (n) or green (o), otherwise if it is using the notes parameter value the circle is red.
