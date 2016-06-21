@@ -31,7 +31,8 @@ After installation, it will show a tool in the tool palette.
 ### Usage Instructions
 
 1. Open a glyph in Edit View.
-2. Use C or Shift+C to toggle the tool.
+2. Enter your font's measurements in the Dimensions palette, for 'O', 'n' and 'o'. Also enter a value in the Notes parameter for backup dimensions.
+3. Use C or Shift+C to toggle the tool.
 
 ### Installation
 
