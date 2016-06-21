@@ -25,7 +25,7 @@
 	<key>UpdateFeedURL</key>
 	<string>https://raw.githubusercontent.com/weiweihuanghuang/GaugeTool/master/GaugeTool.glyphsTool/Contents/Info.plist</string>
 	<key>productPageURL</key>
-	<string>https://github.com/weiweihuanghuang/GuageTool</string>
+	<string>https://github.com/weiweihuanghuang/GaugeTool</string>
 	<key>productReleaseNotes</key>
 	<string>____LatestReleaseNotes____</string>
 	<key>LSHasLocalizedDisplayName</key>
