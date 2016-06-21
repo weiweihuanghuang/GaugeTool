@@ -42,6 +42,8 @@ After installation, it will show a tool in the tool palette.
 
 ### Requirements
 
+Latest version tested with Glyphs App Version 2.3.1 (903).
+
 The plugin needs Glyphs 2.0 or higher, running on OS X 10.9 or later. It does NOT work with Glyphs 1.x.
 
 ### License
