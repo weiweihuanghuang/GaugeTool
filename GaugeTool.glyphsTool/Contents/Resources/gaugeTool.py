@@ -4,7 +4,7 @@
 
 from GlyphsApp.plugins import *
 import traceback
-from Foundation import *
+from AppKit import NSCursor
 import os, math
 import Quartz
 import traceback
