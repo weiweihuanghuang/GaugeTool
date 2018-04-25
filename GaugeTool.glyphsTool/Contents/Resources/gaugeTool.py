@@ -7,6 +7,8 @@ import traceback
 from Foundation import *
 import os, math
 import Quartz
+import traceback
+from AppKit import NSColor, NSBezierPath
 
 class gaugeTool(SelectTool):
 	def settings(self):
@@ -30,8 +32,40 @@ class gaugeTool(SelectTool):
 	def foreground(self, layer):
 		pass
 
+	def mousePosition(self):
+		view = self.controller.graphicView()
+		mousePosition = view.getActiveLocation_(Glyphs.currentEvent())
+		return mousePosition
+
+	def foregroundInViewCoords(self, layer):
+		pass
+
 	def background(self, layer):
 		self.makeCursor()
+		try:
+			thisGlyphName = Glyphs.font.selectedLayers[0].parent.name
+			# not uppercase or lowercase
+			cursorText = u"X"
+			if Glyphs.glyphInfoForName( str(thisGlyphName) ).subCategory not in ["Lowercase", "Uppercase"]:
+				cursorText = u"?"
+			# curve
+			elif self.activeToolIndex == 0:
+				cursorText = u"●"
+			# linear
+			elif self.activeToolIndex == 1:
+				cursorText = u"+"
+
+			mousePosition = self.mousePosition()
+
+			scale = self.getScale()
+			string = NSString.stringWithString_(u"%s" % cursorText)
+			attributes = NSString.drawTextAttributes_(NSColor.blackColor())
+			textSize = string.sizeWithAttributes_(attributes)
+
+			self.drawText( string, (mousePosition.x, mousePosition.y))
+
+		except:
+			print traceback.format_exc()
 
 	def activate(self):
 		self.makeCursor()
@@ -140,7 +174,8 @@ class gaugeTool(SelectTool):
 			pos = fontNote.find(",")
 			return int(fontNote[:pos]), int(fontNote[pos+1:])
 		except:
-			return 100, 100
+			return 5, 5
+			print "gaugeTool can't find any values to use...!"
 
 	# Gets the cursor size using the dimensions palette
 	def getCursorSize(self):
@@ -160,19 +195,40 @@ class gaugeTool(SelectTool):
 					return int(Dimensions["nV"]), int(Dimensions["nd"]), (0, 0, 0.5, 0.4)
 
 			elif Glyphs.glyphInfoForName( str(thisGlyphName) ).subCategory == "Uppercase":
+				# Use the dimensions from O for uppercase
 				if self.activeToolIndex == 0:
 					circleCursorColor = (0, 0.5, 0, 0.4)
+					return int(Dimensions["OV"]), int(Dimensions["OH"]), circleCursorColor
+				# Use the dimensions from H for uppercase
 				elif self.activeToolIndex == 1:
 					circleCursorColor = (0, 0, 0.5, 0.4)
-				return int(Dimensions["OV"]), int(Dimensions["OH"]), circleCursorColor
+					return int(Dimensions["HV"]), int(Dimensions["HH"]), circleCursorColor
 
 			else:
-				(x, y) = self.getFontNoteXY()
-				return x, y, (0.5, 0, 0, 0.4)
+				try: 
+					[x, y] = thisFontMaster.customParameters['gaugeDimensions'].split(",")
+				except:
+					x, y = self.getFontNoteXY()
+				return int(x), int(y), (0.5, 0, 0, 0.4)
 		except Exception as e:
-			(x, y) = self.getFontNoteXY()
-			return x, y, (0.5, 0, 0, 0.4)
-			print str(e)
+			try:
+				[x, y] = thisFontMaster.customParameters['gaugeDimensions'].split(",")
+			except:
+				x, y = self.getFontNoteXY()
+			return int(x), int(y), (0.5, 0, 0, 0.4)
+
+	def drawText( self, text, textPosition, fontColor=NSColor.whiteColor() ):
+		try:
+			string = NSString.stringWithString_(text)
+			string.drawAtPoint_color_alignment_(textPosition, fontColor, 4)
+		except:
+			print traceback.format_exc()
+
+	def getScale( self ):
+		try:
+			return self._scale
+		except:
+			return 1 # Attention, just for debugging!
 
 	def logToConsole( self, message ):
 		"""
