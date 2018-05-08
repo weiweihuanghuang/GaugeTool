@@ -1,6 +1,6 @@
 # GaugeTool.glyphsTool
 
-![Gauge tool animation](images/gaugeTool.gif)
+![Gauge tool animation](images/gaugetool.gif)
 
 
 This is a plugin for [Glyphs App](http://glyphsapp.com/). Shout out to [Dinamo](http://www.dinamo.us) for the idea and Georg Seifert (@schriftgestalt) for code and assistance!
@@ -24,7 +24,7 @@ If the current glyph is neither a lowercase or uppercase letter the tool will us
 2. Enter your font's measurements in the Dimensions palette, for 'H', 'O', 'n' and 'o'. Also create a custom Master parameter called "GaugeTool" for backup dimensions in the format "width,height", i.e. "75,75"
 3. Use C or Shift+C to toggle the tool.
 
-![Gauge tool](images/gaugeTool.png)
+![Gauge tool](images/gaugetool.png)
 
 ### Installation
 
