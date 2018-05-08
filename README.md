@@ -1,38 +1,30 @@
 # GaugeTool.glyphsTool
 
-This is a plugin for [Glyphs App](http://glyphsapp.com/). Shout out to [Dinamo](http://www.dinamo.us) for the idea and Georg Seifert (@schriftgestalt) for sample code and assistance!
+![Gauge tool animation](images/gaugeTool.gif)
 
-![Gauge tool animation](images/gaugetool.gif)
 
-The tool shows an oval for a mouse cursor which can be used to gauge the width of strokes. The size of this oval is set in the dimensions palette and the Notes tab in the Font Info window.
+This is a plugin for [Glyphs App](http://glyphsapp.com/). Shout out to [Dinamo](http://www.dinamo.us) for the idea and Georg Seifert (@schriftgestalt) for code and assistance!
 
-![n tool](images/n.png) ![o tool](images/o.png)
+The tool shows an oval as the mouse cursor which can be used to gauge the width of strokes. The size of this oval is set in the dimensions palette for uppercase and lowercase letters and for the rest as a custom master parameter named "GaugeTool" (format: "width,height") in under Font Info.
 
 ![Dimensions palette](images/dimensions.png)
-#### Lowercase
-There are 2 tools nested under each other, the 'n' and 'o' tool, which uses their respective values in the dimensions palette for lowercase letters. (To change tools, press Shift+C). 'n' is blue while 'o' is green.
+![Custom parameter palette](images/customparameter.png)
 
-#### Uppercase
-It will detect uppercase letters and uses only the 'O' dimensions. This is the same for the 'n' and 'o' tool.
+There are 2 tools nested under the toolbar icon: the straight stem (＋) and round stem tool (○) – to change tools, press Shift+C. 
 
-#### Other glyphs
-If it is neither lowercase or uppercase the tool will use the value set in the first line of the Notes parameter. Which can be set with the [Note Palette](https://github.com/mekkablue/NotePalettes) plugin:
+![straight tool](images/straight.png) ![round tool](images/round.png)
 
-![Notes Palette](images/notespalette.png)
+The straighs stem tool draws a blue oval and and the round stem a green oval. These use their respective values in the dimensions palette: the straight stem tool uses H for uppercase and n for lowercase, the round stem tool uses O and o.
 
-or in the Font Info window:
-
-![Notes Tab](images/notestab.png)
-
-When the tool is using the dimension palette measurements the circle is either blue (n) or green (o), otherwise if it is using the notes parameter value the circle is red.
-
-After installation, it will show a tool in the tool palette.
+If the current glyph is neither a lowercase or uppercase letter the tool will use the value set in the "GaugeTool" custom parameter and display an asterisk (✳) in the oval. When the tool is using the custom parameter measurements, the oval is red.
 
 ### Usage Instructions
 
 1. Open a glyph in Edit View.
-2. Enter your font's measurements in the Dimensions palette, for 'O', 'n' and 'o'. Also enter a value in the Notes parameter for backup dimensions.
+2. Enter your font's measurements in the Dimensions palette, for 'H', 'O', 'n' and 'o'. Also create a custom Master parameter called "GaugeTool" for backup dimensions in the format "width,height", i.e. "75,75"
 3. Use C or Shift+C to toggle the tool.
+
+![Gauge tool](images/gaugeTool.png)
 
 ### Installation
 
@@ -48,7 +40,7 @@ The plugin needs Glyphs 2.0 or higher, running on OS X 10.9 or later. It does NO
 
 ### License
 
-2016 Wei Huang (@weiweihuanghuang).
+2016–2018 Wei Huang (@weiweihuanghuang).
 Based on sample code by Georg Seifert (@schriftgestalt).
 Idea from [Dinamo](http://www.dinamo.us).
 
