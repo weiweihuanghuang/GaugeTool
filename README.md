@@ -16,7 +16,7 @@ There are 2 tools nested under the toolbar icon: the straight stem (＋) and rou
 
 The straighs stem tool draws a blue oval and and the round stem a green oval. These use their respective values in the dimensions palette: the straight stem tool uses H for uppercase and n for lowercase, the round stem tool uses O and o.
 
-If the current glyph is neither a lowercase or uppercase letter the tool will use the value set in the "GaugeTool" custom parameter and display an asterisk (✳) in the oval. When the tool is using the custom parameter measurements, the oval is red.
+If the current glyph is neither a lowercase or uppercase letter the tool will use the value set in the "GaugeTool" custom parameter and display an asterisk (✳&#xFE0E;) in the oval. When the tool is using the custom parameter measurements, the oval is red.
 
 ### Usage Instructions
 
