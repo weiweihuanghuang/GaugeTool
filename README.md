@@ -3,7 +3,7 @@
 ![Gauge tool animation](images/gaugetool.gif)
 
 
-This is a plugin for [Glyphs App](http://glyphsapp.com/). Shout out to [Dinamo](http://www.dinamo.us) for the idea and Georg Seifert (@schriftgestalt) for code and assistance!
+This is a plugin for [Glyphs App](http://glyphsapp.com/). Shout out to [Dinamo](http://www.abcdinamo.com/) for the idea and Georg Seifert ([@schriftgestalt](https://github.com/schriftgestalt)) for code and assistance!
 
 The tool shows an oval as the mouse cursor which can be used to gauge the width of strokes. The size of this oval is set in the dimensions palette for uppercase and lowercase letters and for the rest as a custom master parameter named "GaugeTool" (format: "width,height") in under Font Info.
 
@@ -40,9 +40,9 @@ The plugin needs Glyphs 2.0 or higher, running on OS X 10.9 or later. It does NO
 
 ### License
 
-2016–2018 Wei Huang (@weiweihuanghuang).
-Based on sample code by Georg Seifert (@schriftgestalt).
-Idea from [Dinamo](http://www.dinamo.us).
+2016–2018 Wei Huang ([@weiweihuanghuang](https://github.com/weiweihuanghuang)).
+Based on sample code by Georg Seifert ([@schriftgestalt](https://github.com/schriftgestalt)).
+Idea from [Dinamo](http://www.abcdinamo.com/).
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
