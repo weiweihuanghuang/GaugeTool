@@ -15,6 +15,20 @@ import traceback
 from Foundation import NSString
 from AppKit import NSCursor
 
+try:
+	from GlyphsApp import GSUppercase, GSLowercase
+except: pass
+
+def glyphCase(glyph):
+	if Glyphs.buildNumber > 3000:
+		if glyph.case == GSUppercase:
+			return "Uppercase"
+		if glyph.case == GSLowercase:
+			return "Lowercase"
+		return "NoCase"
+	else:
+		return glyph.subCategory
+
 class gaugeTool(SelectTool):
 	@objc.python_method
 	def settings(self):
@@ -210,7 +224,8 @@ class gaugeTool(SelectTool):
 			Dimensions = font.userData["GSDimensionPlugin.Dimensions"][thisFontMasterID]
 			glyph = font.selectedLayers[0].parent
 			thisGlyphName = glyph.name
-			if glyph.subCategory == "Lowercase":
+			case = glyphCase(glyph)
+			if case == "Lowercase":
 				# Use the dimensions from o for lowercase
 				if self.activeToolIndex == 0:
 					return int(Dimensions["oV"]), int(Dimensions["oH"]), self.roundToolColour
@@ -218,7 +233,7 @@ class gaugeTool(SelectTool):
 				elif self.activeToolIndex == 1:
 					return int(Dimensions["nV"]), int(Dimensions["nd"]), self.straightToolColour
 
-			elif glyph.subCategory == "Uppercase":
+			elif case == "Uppercase":
 				# Use the dimensions from O for uppercase
 				if self.activeToolIndex == 0:
 					return int(Dimensions["OV"]), int(Dimensions["OH"]), self.roundToolColour
