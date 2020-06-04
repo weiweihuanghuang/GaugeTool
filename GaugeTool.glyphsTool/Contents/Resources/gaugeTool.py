@@ -1,21 +1,22 @@
 # encoding: utf-8
 # Draws a circle at your cursor using the values in the dimensions palette, or from the fall back as defined in as a Master parameter "GaugeTool" with  the format width,height i.e.
 # (
-#         {
+#     {
 #         gaugeDimensions = "500,500";
 #     }
 # )
 # By Wei Huang, 2016–2018 with many thanks to Georg Seifert for assistance, and Dinamo for the idea
 
+from __future__ import division, print_function, unicode_literals
 from GlyphsApp.plugins import *
 import traceback
-import os, math
-import Quartz
+import os, math, objc
 import traceback
 from Foundation import NSString
 from AppKit import NSCursor
 
 class gaugeTool(SelectTool):
+	@objc.python_method
 	def settings(self):
 		self.name = u'Gauge Tool'
 		self.keyboardShortcut = 'c'
@@ -33,7 +34,7 @@ class gaugeTool(SelectTool):
 		self.activeToolIndex = Glyphs.intDefaults["GaugeToolActiveTool"]
 
 		self.lastScale = -1
-
+	@objc.python_method
 	def foreground(self, layer):
 		pass
 
@@ -43,9 +44,7 @@ class gaugeTool(SelectTool):
 		mousePosition = view.getActiveLocation_(Glyphs.currentEvent())
 		return mousePosition
 
-	def foregroundInViewCoords(self, layer):
-		pass
-
+	@objc.python_method
 	def background(self, layer):
 		self.makeCursor()
 
@@ -113,7 +112,7 @@ class gaugeTool(SelectTool):
 				circleCursorImage.lockFocus()
 				rect = NSMakeRect(0, 0, x * Scale, y * Scale)
 				# circleCursorColor = 0.5, 0.5, 0.5, 0.9
-				NSColor.colorWithCalibratedRed_green_blue_alpha_( *circleCursorColor ).set()
+				NSColor.colorWithCalibratedRed_green_blue_alpha_(*circleCursorColor).set()
 				NSBezierPath.bezierPathWithOvalInRect_(rect).fill()
 
 				try:
@@ -123,12 +122,12 @@ class gaugeTool(SelectTool):
 						NSFontAttributeName: NSFont.systemFontOfSize_weight_(fontSize,0.0),
 						NSForegroundColorAttributeName: NSColor.blackColor()
 					}
-					displayText = NSAttributedString.alloc().initWithString_attributes_( self.getCursorType(circleCursorColor), fontAttributes)
+					displayText = NSAttributedString.alloc().initWithString_attributes_(self.getCursorType(circleCursorColor), fontAttributes)
 					textAlignment = 4 # top left: 6, top center: 7, top right: 8, center left: 3, center center: 4, center right: 5, bottom left: 0, bottom center: 1, bottom right: 2
 					#font = layer.parent.parent
-					displayText.drawAtPoint_alignment_(NSMakePoint(0 + x * Scale / 2, 0 + y * Scale / 2 ), textAlignment)
+					displayText.drawAtPoint_alignment_(NSMakePoint(0 + x * Scale / 2, 0 + y * Scale / 2), textAlignment)
 				except:
-					print traceback.format_exc()
+					print(traceback.format_exc())
 
 				circleCursorImage.unlockFocus()
 				self.circleCursor = NSCursor.alloc().initWithImage_hotSpot_(circleCursorImage, NSMakePoint(x / 2 * Scale, y / 2 * Scale))
@@ -138,7 +137,7 @@ class gaugeTool(SelectTool):
 				except:
 					pass
 		except Exception as e:
-			print traceback.format_exc()
+			print(traceback.format_exc())
 
 	# Method to change the cursor
 	def standardCursor(self):
@@ -146,7 +145,7 @@ class gaugeTool(SelectTool):
 			return self.circleCursor
 		except Exception as e:
 			self.makeCursor()
-			self.logToConsole( "gaugeTool standardCursor: %s" % str(e) )
+			self.logToConsole("gaugeTool standardCursor: %s" % str(e))
 
 	# Sets the menu toolbar with multiple tools
 	def toolbarMenu(self):
@@ -165,7 +164,7 @@ class gaugeTool(SelectTool):
 
 			return theMenu;
 		except Exception as e:
-			self.logToConsole( "gaugeTool toolbarMenu: %s" % str(e))
+			self.logToConsole("gaugeTool toolbarMenu: %s" % str(e))
 
 	noValueColour = (0.5, 0.5, 0.5, 0.1) # grey
 	customParameterColour = (0.5, 0, 0, 0.4) # red
@@ -173,6 +172,7 @@ class gaugeTool(SelectTool):
 	straightToolColour = (0, 0, 0.5, 0.4) # blue
 
 	# Gets the cursor type, round stem or straight stem
+	@objc.python_method
 	def getCursorType(self, circleCursorColor):
 		# glyph = Glyphs.font.selectedLayers[0].parent
 		# not uppercase or lowercase
@@ -199,7 +199,7 @@ class gaugeTool(SelectTool):
 			return int(fontNote[:pos]), int(fontNote[pos+1:])
 		except:
 			return 50, 50
-			print "gaugeTool can't find any values to use...!"
+			print("gaugeTool can't find any values to use...!")
 
 	# Gets the cursor size using the dimensions palette
 	def getCursorSize(self):
@@ -246,28 +246,31 @@ class gaugeTool(SelectTool):
 					return x, y, self.noValueColour
 			return int(x), int(y), self.customParameterColour
 
-	def drawText( self, text, textPosition, fontColor=NSColor.blackColor() ):
+	@objc.python_method
+	def drawText(self, text, textPosition, fontColor=NSColor.blackColor()):
 		try:
 			string = NSString.stringWithString_(text)
 			string.drawAtPoint_color_alignment_(textPosition, fontColor, 4)
 		except:
-			print traceback.format_exc()
+			print(traceback.format_exc())
 
-	def getScale( self ):
+	def getScale(self):
 		try:
 			return self._scale
 		except:
 			return 1 # Attention, just for debugging!
 
-	def logToConsole( self, message ):
+	@objc.python_method
+	def logToConsole(self, message):
 		"""
 		The variable 'message' will be passed to Console.app.
-		Use self.logToConsole( "bla bla" ) for debugging.
+		Use self.logToConsole("bla bla") for debugging.
 		"""
-		myLog = "%s:\n%s" % ( "Gauge Tool", message )
-		print myLog
-		NSLog( myLog )
+		myLog = "%s:\n%s" % ("Gauge Tool", message)
+		print(myLog)
+		NSLog(myLog)
 
+	@objc.python_method
 	def __file__(self):
 		"""Please leave this method unchanged"""
 		return __file__
