@@ -8,9 +8,11 @@
 # By Wei Huang, 2016–2018 with many thanks to Georg Seifert for assistance, and Dinamo for the idea
 
 from __future__ import division, print_function, unicode_literals
+import objc
+from GlyphsApp import *
 from GlyphsApp.plugins import *
 import traceback
-import os, math, objc
+import os, math
 import traceback
 from Foundation import NSString
 from AppKit import NSCursor
@@ -48,10 +50,12 @@ class gaugeTool(SelectTool):
 		self.activeToolIndex = Glyphs.intDefaults["GaugeToolActiveTool"]
 
 		self.lastScale = -1
+
 	@objc.python_method
 	def foreground(self, layer):
 		pass
 
+	@objc.python_method
 	def mousePosition(self):
 		# view = self.controller.graphicView()
 		view = Glyphs.font.currentTab.graphicView()
@@ -68,12 +72,12 @@ class gaugeTool(SelectTool):
 	def deactivate(self):
 		pass
 
-	def activateGaugeToolO(self):
+	def activateGaugeToolO_(self, sender):
 		self.activeToolIndex = 0
 		Glyphs.intDefaults["GaugeToolActiveTool"] = self.activeToolIndex
 		self.makeCursor()
 
-	def activateGaugeToolN(self):
+	def activateGaugeToolN_(self, sender):
 		self.activeToolIndex = 1
 		Glyphs.intDefaults["GaugeToolActiveTool"] = self.activeToolIndex
 		self.makeCursor()
@@ -81,9 +85,9 @@ class gaugeTool(SelectTool):
 	def selectNextSubTool_(self, sender):
 		# is called when the user presses shift + the self.keyboardShortcut to access all subtools by keyboard
 		if self.activeToolIndex == 0:
-			self.activateGaugeToolN()
+			self.activateGaugeToolN_(sender)
 		else:
-			self.activateGaugeToolO()
+			self.activateGaugeToolO_(sender)
 
 	def toolBarIcon(self):
 		# o tool
@@ -109,6 +113,7 @@ class gaugeTool(SelectTool):
 		pass
 
 	# Sets the cursor as a circle cursor
+	@objc.python_method
 	def makeCursor(self):
 		try:
 			Scale = Glyphs.font.currentTab.scale
@@ -116,12 +121,10 @@ class gaugeTool(SelectTool):
 				return
 			# x, y = 100, 100
 			x, y, circleCursorColor = self.getCursorSize()
-			# print "__getCursorSize", x, y, circleCursorColor
-
-
+			print("__getCursorSize", x, y, circleCursorColor)
 			if x > 0 and y > 0:
 				ImageSize = NSMakeSize(math.ceil(x * Scale), math.ceil(y * Scale))
-				# print math.ceil(x * Scale), math.ceil(y * Scale)
+				# print(math.ceil(x * Scale), math.ceil(y * Scale))
 				circleCursorImage = NSImage.alloc().initWithSize_(ImageSize)
 				circleCursorImage.lockFocus()
 				rect = NSMakeRect(0, 0, x * Scale, y * Scale)
@@ -145,11 +148,10 @@ class gaugeTool(SelectTool):
 
 				circleCursorImage.unlockFocus()
 				self.circleCursor = NSCursor.alloc().initWithImage_hotSpot_(circleCursorImage, NSMakePoint(x / 2 * Scale, y / 2 * Scale))
-				try:
-					if self.editViewController().graphicView().cursor() != self.circleCursor:
-						self.editViewController().graphicView().setCursor_(self.circleCursor) 
-				except:
-					pass
+
+				if self.editViewController().graphicView().cursor() != self.circleCursor:
+					self.editViewController().graphicView().setCursor_(self.circleCursor) 
+
 		except Exception as e:
 			print(traceback.format_exc())
 
@@ -166,12 +168,12 @@ class gaugeTool(SelectTool):
 		try:
 			theMenu = NSMenu.alloc().initWithTitle_(self.title())
 
-			newMenuItem = NSMenuItem.alloc().initWithTitle_action_keyEquivalent_("Gauge Tool n", self.activateGaugeToolN, "")
+			newMenuItem = NSMenuItem.alloc().initWithTitle_action_keyEquivalent_("Gauge Tool n", self.activateGaugeToolN_, "")
 			newMenuItem.setTarget_(self)
 			newMenuItem.setImage_(self.nImage) # it has to be an NSImage, this is optional
 			theMenu.addItem_(newMenuItem)
 
-			newMenuItem = NSMenuItem.alloc().initWithTitle_action_keyEquivalent_("Gauge Tool o", self.activateGaugeToolO, "") # self.setErease is a method in your plugin class
+			newMenuItem = NSMenuItem.alloc().initWithTitle_action_keyEquivalent_("Gauge Tool o", self.activateGaugeToolO_, "") # self.setErease is a method in your plugin class
 			newMenuItem.setTarget_(self)
 			newMenuItem.setImage_(self.oImage) # it has to be an NSImage, this is optional
 			theMenu.addItem_(newMenuItem)
@@ -206,6 +208,7 @@ class gaugeTool(SelectTool):
 
 	# Gets the dimensinos from the Font Note parameter, the first line of the note, in the following format:
 	# 100, 100
+	@objc.python_method
 	def getFontNoteXY(self):
 		try:
 			fontNote = Glyphs.font.note.split('\n', 1)[0]
@@ -216,6 +219,7 @@ class gaugeTool(SelectTool):
 			print("gaugeTool can't find any values to use...!")
 
 	# Gets the cursor size using the dimensions palette
+	@objc.python_method
 	def getCursorSize(self):
 		try:
 			font = Glyphs.font
@@ -228,20 +232,20 @@ class gaugeTool(SelectTool):
 			if case == "Lowercase":
 				# Use the dimensions from o for lowercase
 				if self.activeToolIndex == 0:
-					return int(Dimensions["oV"]), int(Dimensions["oH"]), self.roundToolColour
+					return int(Dimensions.get("oV", 50)), int(Dimensions.get("oH", 50)), self.roundToolColour
 				# Use the dimensions from n for lowercase
 				elif self.activeToolIndex == 1:
-					return int(Dimensions["nV"]), int(Dimensions["nd"]), self.straightToolColour
+					return int(Dimensions.get("nV", 50)), int(Dimensions.get("nd", 50)), self.straightToolColour
 
 			elif case == "Uppercase":
 				# Use the dimensions from O for uppercase
 				if self.activeToolIndex == 0:
-					return int(Dimensions["OV"]), int(Dimensions["OH"]), self.roundToolColour
+					return int(Dimensions.get("OV", 50)), int(Dimensions.get("OH", 50)), self.roundToolColour
 				# Use the dimensions from H for uppercase
 				elif self.activeToolIndex == 1:
-					return int(Dimensions["HV"]), int(Dimensions["HH"]), self.straightToolColour
+					return int(Dimensions.get("HV", 50)), int(Dimensions.get("HH", 50)), self.straightToolColour
 			else:
-				try: 
+				try:
 					[x, y] = thisFontMaster.customParameters['GaugeTool'].split(",")
 				except:
 					try:
@@ -251,6 +255,7 @@ class gaugeTool(SelectTool):
 						return x, y, self.noValueColour
 				return int(x), int(y), self.customParameterColour
 		except Exception as e:
+			print(traceback.format_exc())
 			try:
 				[x, y] = thisFontMaster.customParameters['GaugeTool'].split(",")
 			except:
@@ -269,6 +274,7 @@ class gaugeTool(SelectTool):
 		except:
 			print(traceback.format_exc())
 
+	@objc.python_method
 	def getScale(self):
 		try:
 			return self._scale
