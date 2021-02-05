@@ -63,6 +63,10 @@ class gaugeTool(SelectTool):
 		return mousePosition
 
 	@objc.python_method
+	def foregroundInViewCoords(self, layer):
+		pass
+
+	@objc.python_method
 	def background(self, layer):
 		self.makeCursor()
 
@@ -85,9 +89,9 @@ class gaugeTool(SelectTool):
 	def selectNextSubTool_(self, sender):
 		# is called when the user presses shift + the self.keyboardShortcut to access all subtools by keyboard
 		if self.activeToolIndex == 0:
-			self.activateGaugeToolN_(sender)
+			self.activateGaugeToolN_(None)
 		else:
-			self.activateGaugeToolO_(sender)
+			self.activateGaugeToolO_(None)
 
 	def toolBarIcon(self):
 		# o tool
@@ -121,7 +125,7 @@ class gaugeTool(SelectTool):
 				return
 			# x, y = 100, 100
 			x, y, circleCursorColor = self.getCursorSize()
-			print("__getCursorSize", x, y, circleCursorColor)
+			# print("__getCursorSize", x, y, circleCursorColor)
 			if x > 0 and y > 0:
 				ImageSize = NSMakeSize(math.ceil(x * Scale), math.ceil(y * Scale))
 				# print(math.ceil(x * Scale), math.ceil(y * Scale))
@@ -148,14 +152,16 @@ class gaugeTool(SelectTool):
 
 				circleCursorImage.unlockFocus()
 				self.circleCursor = NSCursor.alloc().initWithImage_hotSpot_(circleCursorImage, NSMakePoint(x / 2 * Scale, y / 2 * Scale))
-
-				if self.editViewController().graphicView().cursor() != self.circleCursor:
-					self.editViewController().graphicView().setCursor_(self.circleCursor) 
-
+				try:
+					if self.editViewController().graphicView().cursor() != self.circleCursor:
+						self.editViewController().graphicView().setCursor_(self.circleCursor) 
+				except:
+					pass
 		except Exception as e:
 			print(traceback.format_exc())
 
 	# Method to change the cursor
+	@objc.python_method
 	def standardCursor(self):
 		try:
 			return self.circleCursor
