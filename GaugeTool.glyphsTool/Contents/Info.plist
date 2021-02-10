@@ -3,9 +3,7 @@
 <plist version="1.0">
 <dict>
 	<key>CFBundleDevelopmentRegion</key>
-	<string>English</string>
-	<key>CFBundleDisplayName</key>
-	<string>Gauge Tool</string>
+	<string>en</string>
 	<key>CFBundleExecutable</key>
 	<string>plugin</string>
 	<key>CFBundleIdentifier</key>
@@ -14,25 +12,21 @@
 	<string>6.0</string>
 	<key>CFBundleName</key>
 	<string>Gauge Tool</string>
-	<key>CFBundlePackageType</key>
-	<string>BNDL</string>
-	<key>CFBundleVersion</key>
-	<string>1.2</string>
 	<key>CFBundleShortVersionString</key>
-	<string>1.2</string>
+	<string>1.3</string>
+	<key>CFBundleVersion</key>
+	<string>13</string>
 	<key>UpdateFeedURL</key>
 	<string>https://raw.githubusercontent.com/weiweihuanghuang/GaugeTool/master/GaugeTool.glyphsTool/Contents/Info.plist</string>
 	<key>productPageURL</key>
 	<string>https://github.com/weiweihuanghuang/GaugeTool</string>
-	<key>productReleaseNotes</key>
-	<string>____LatestReleaseNotes____</string>
 	<key>NSHumanReadableCopyright</key>
 	<string>Copyright, Wei Huang, 2016</string>
 	<key>NSPrincipalClass</key>
 	<string>gaugeTool</string>
 	<key>PyMainFileNames</key>
 	<array>
-		<string>../MacOS/main.py</string>
+		<string>gaugeTool.py</string>
 	</array>
 </dict>
 </plist>
