@@ -231,7 +231,10 @@ class gaugeTool(SelectTool):
 			font = Glyphs.font
 			thisFontMaster = font.selectedFontMaster
 			thisFontMasterID = thisFontMaster.id
-			Dimensions = font.userData["GSDimensionPlugin.Dimensions"][thisFontMasterID]
+			allDimensions = font.userData["GSDimensionPlugin.Dimensions"]
+			if allDimensions is None:
+				return 0, 0, self.noValueColour
+			Dimensions = allDimensions[thisFontMasterID]
 			glyph = font.selectedLayers[0].parent
 			thisGlyphName = glyph.name
 			case = glyphCase(glyph)
