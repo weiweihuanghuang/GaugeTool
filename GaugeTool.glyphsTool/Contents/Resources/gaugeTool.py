@@ -9,17 +9,18 @@
 
 from __future__ import division, print_function, unicode_literals
 import objc
-from GlyphsApp import *
-from GlyphsApp.plugins import *
+from GlyphsApp import Glyphs
+from GlyphsApp.plugins import SelectTool
 import traceback
-import os, math
-import traceback
-from Foundation import NSString
-from AppKit import NSCursor
+import os
+import math
+from Foundation import NSString, NSMakeSize, NSMakeRect, NSMakePoint, NSLog, NSAttributedString
+from AppKit import NSCursor, NSImage, NSColor, NSBezierPath, NSMenu, NSMenuItem, NSFont, NSFontAttributeName, NSForegroundColorAttributeName
 
 try:
 	from GlyphsApp import GSUppercase, GSLowercase
 except: pass
+
 
 def glyphCase(glyph):
 	if Glyphs.buildNumber > 3000:
@@ -30,6 +31,7 @@ def glyphCase(glyph):
 		return "NoCase"
 	else:
 		return glyph.subCategory
+
 
 class gaugeTool(SelectTool):
 	@objc.python_method
@@ -140,7 +142,7 @@ class gaugeTool(SelectTool):
 					fontSize = 18
 					fontAttributes = {
 						#NSFontAttributeName: NSFont.labelFontOfSize_(10.0),
-						NSFontAttributeName: NSFont.systemFontOfSize_weight_(fontSize,0.0),
+						NSFontAttributeName: NSFont.systemFontOfSize_weight_(fontSize, 0.0),
 						NSForegroundColorAttributeName: NSColor.blackColor()
 					}
 					displayText = NSAttributedString.alloc().initWithString_attributes_(self.getCursorType(circleCursorColor), fontAttributes)
@@ -154,11 +156,11 @@ class gaugeTool(SelectTool):
 				self.circleCursor = NSCursor.alloc().initWithImage_hotSpot_(circleCursorImage, NSMakePoint(x / 2 * Scale, y / 2 * Scale))
 				try:
 					if self.editViewController().graphicView().cursor() != self.circleCursor:
-						self.editViewController().graphicView().setCursor_(self.circleCursor) 
+						self.editViewController().graphicView().setCursor_(self.circleCursor)
 				except:
 					pass
 		except Exception as e:
-			print(traceback.format_exc())
+			print(traceback.format_exc(), e)
 
 	# Method to change the cursor
 	@objc.python_method
@@ -184,7 +186,7 @@ class gaugeTool(SelectTool):
 			newMenuItem.setImage_(self.oImage) # it has to be an NSImage, this is optional
 			theMenu.addItem_(newMenuItem)
 
-			return theMenu;
+			return theMenu
 		except Exception as e:
 			self.logToConsole("gaugeTool toolbarMenu: %s" % str(e))
 
@@ -219,7 +221,7 @@ class gaugeTool(SelectTool):
 		try:
 			fontNote = Glyphs.font.note.split('\n', 1)[0]
 			pos = fontNote.find(",")
-			return int(fontNote[:pos]), int(fontNote[pos+1:])
+			return int(fontNote[:pos]), int(fontNote[pos + 1:])
 		except:
 			return 50, 50
 			print("gaugeTool can't find any values to use...!")
@@ -236,7 +238,7 @@ class gaugeTool(SelectTool):
 				return 0, 0, self.noValueColour
 			Dimensions = allDimensions[thisFontMasterID]
 			glyph = font.selectedLayers[0].parent
-			thisGlyphName = glyph.name
+			# thisGlyphName = glyph.name
 			case = glyphCase(glyph)
 			if case == "Lowercase":
 				# Use the dimensions from o for lowercase
@@ -260,11 +262,11 @@ class gaugeTool(SelectTool):
 					try:
 						[x, y] = thisFontMaster.customParameters['gaugeTool'].split(",")
 					except:
-						x, y = self.getFontNoteXY()	
+						x, y = self.getFontNoteXY()
 						return x, y, self.noValueColour
 				return int(x), int(y), self.customParameterColour
 		except Exception as e:
-			print(traceback.format_exc())
+			print(traceback.format_exc(), e)
 			try:
 				[x, y] = thisFontMaster.customParameters['GaugeTool'].split(",")
 			except:
